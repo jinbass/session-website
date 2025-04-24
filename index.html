@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Session - ミュージシャンとつながり、ジャムセッションを開催する</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #DC143C;  /* Crimson - passionate */
+            --secondary: #0047AB; /* Bright blue */
+            --accent: #FF3366;    /* Bright pink */
+            --background: #FFFFFF;
+            --text: #14171A;
+            --light-gray: #AAB8C2;
+            --extra-light-gray: #E1E8ED;
+            --dark-gray: #657786;
+            --border: #E1E8ED;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            color: var(--text);
+            background-color: var(--background);
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Release banner */
+        .release-banner {
+            background-color: var(--primary);
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            position: relative;
+            z-index: 1500;
+        }
+
+        /* Header styles */
+        header {
+            background-color: var(--background);
+            position: fixed;
+            width: 100%;
+            top: 49px; /* Adjusted to account for release banner height */
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-weight: 700;
+            font-size: 24px;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .logo svg {
+            margin-right: 10px;
+        }
+
+        .nav-menu {
+            display: flex;
+        }
+
+        .nav-item {
+            margin-left: 30px;
+            font-weight: 500;
+        }
+
+        .nav-link {
+            color: var(--text);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--primary);
+        }
+
+        .cta-button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
+        }
+
+        .cta-button:hover {
+            background-color: #B30000;
+        }
+
+        /* Hero section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            background-color: #f8f9fa;
+            padding-top: 130px; /* Adjusted for header + release banner */
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            width: 50%;
+        }
+
+        .hero-image {
+            position: absolute;
+            right: -5%;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 55%;
+            z-index: 5;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: var(--dark-gray);
+            margin-bottom: 30px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .secondary-button {
+            background-color: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            padding: 9px 19px;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .secondary-button:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        /* Features section */
+        .features {
+            padding: 100px 0;
+            background-color: white;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: "";
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background-color: var(--primary);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .feature-icon {
+            font-size: 50px;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .feature-title {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .feature-description {
+            color: var(--dark-gray);
+        }
+
+        /* How it works section */
+        .how-it-works {
+            padding: 100px 0;
+            background-color: #f8f9fa;
+        }
+
+        .steps-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 50px;
+            flex-wrap: wrap;
+        }
+
+        .step {
+            flex: 1;
+            min-width: 250px;
+            text-align: center;
+            padding: 0 20px;
+            position: relative;
+            margin-bottom: 40px;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 20px;
+            font-weight: 600;
+        }
+
+        .step-title {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+        }
+
+        .step-description {
+            color: var(--dark-gray);
+        }
+
+        /* Connect line between steps */
+        .step:not(:last-child)::after {
+            content: "";
+            position: absolute;
+            top: 20px;
+            right: 0;
+            width: 50%;
+            height: 2px;
+            background-color: var(--primary);
+        }
+
+        .step:not(:first-child)::before {
+            content: "";
+            position: absolute;
+            top: 20px;
+            left: 0;
+            width: 50%;
+            height: 2px;
+            background-color: var(--primary);
+        }
+
+        /* Testimonials section */
+        .testimonials {
+            padding: 100px 0;
+            background-color: white;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .testimonial-card {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 30px;
+            position: relative;
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 20px;
+            padding-left: 20px;
+            border-left: 3px solid var(--primary);
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+        }
+
+        .testimonial-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 15px;
+            background-color: #ddd;
+            overflow: hidden;
+        }
+
+        .testimonial-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .testimonial-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .testimonial-name {
+            font-weight: 600;
+        }
+
+        .testimonial-role {
+            color: var(--dark-gray);
+            font-size: 0.9rem;
+        }
+
+        /* Download section */
+        .download {
+            padding: 100px 0;
+            background-color: #f8f9fa;
+            text-align: center;
+        }
+
+        .download-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+
+        .download-button {
+            display: flex;
+            align-items: center;
+            background-color: var(--text);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 10px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .download-button:hover {
+            background-color: #000;
+        }
+
+        .download-icon {
+            margin-right: 10px;
+            font-size: 24px;
+        }
+
+        .download-text {
+            text-align: left;
+        }
+
+        .download-small {
+            font-size: 0.8rem;
+            display: block;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--text);
+            color: white;
+            padding: 60px 0 30px;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+
+        .footer-column {
+            flex: 1;
+            min-width: 200px;
+            margin-bottom: 30px;
+        }
+
+        .footer-logo {
+            color: white;
+            font-weight: 700;
+            font-size: 20px;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .footer-description {
+            color: var(--light-gray);
+            margin-bottom: 20px;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-icon {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background-color: #2c3640;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .social-icon:hover {
+            background-color: var(--primary);
+        }
+
+        .footer-title {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-link {
+            margin-bottom: 10px;
+        }
+
+        .footer-link a {
+            color: var(--light-gray);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-link a:hover {
+            color: white;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #2c3640;
+            color: var(--light-gray);
+        }
+
+        /* Musical notes animation */
+        .music-notes {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .note {
+            position: absolute;
+            color: rgba(220, 20, 60, 0.1);
+            font-size: 40px;
+            animation: float 15s linear infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* App screenshots */
+        .app-screenshots {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+
+        .screenshot {
+            width: 250px;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .screenshot:hover {
+            transform: translateY(-10px);
+        }
+
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            header {
+                top: 56px; /* Adjusted for mobile */
+            }
+            
+            .release-banner {
+                font-size: 1.2rem;
+                padding: 10px;
+            }
+
+            .hero {
+                padding-top: 150px; /* Adjusted for mobile */
+            }
+
+            .hero-content {
+                width: 100%;
+                text-align: center;
+                padding: 0 20px;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+            }
+
+            .hero-image {
+                opacity: 0.2;
+                width: 90%;
+                right: 5%;
+            }
+
+            .nav-menu {
+                display: none;
+            }
+
+            .step::before, .step::after {
+                display: none;
+            }
+
+            .testimonials-grid, .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-column {
+                flex: 100%;
+                text-align: center;
+            }
+
+            .social-icons {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Release Banner -->
+    <div class="release-banner">
+        2025夏リリース予定
+    </div>
+
+    <header>
+        <div class="nav-container container">
+            <a href="#" class="logo">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9 17.5V5L19 3.5V16M9 17.5C9 19.433 7.433 21 5.5 21C3.567 21 2 19.433 2 17.5C2 15.567 3.567 14 5.5 14C7.433 14 9 15.567 9 17.5ZM19 16C19 17.933 17.433 19.5 15.5 19.5C13.567 19.5 12 17.933 12 16C12 14.067 13.567 12.5 15.5 12.5C17.433 12.5 19 14.067 19 16Z" stroke="#DC143C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Session
+            </a>
+            <nav class="nav-menu">
+                <div class="nav-item">
+                    <a href="#features" class="nav-link">機能</a>
+                </div>
+                <div class="nav-item">
+                    <a href="#how-it-works" class="nav-link">使い方</a>
+                </div>
+                <div class="nav-item">
+                    <a href="#testimonials" class="nav-link">評価</a>
+                </div>
+                <div class="nav-item">
+                    <a href="#download" class="cta-button">アプリをダウンロード</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="music-notes" id="musicNotes">
+            <!-- Music notes will be added with JavaScript -->
+        </div>
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">あなたの近くのミュージシャンと繋がり、セッションしよう</h1>
+                <p class="hero-subtitle">Sessionは、地域のミュージシャンとの出会い、ジャムセッションの開催、参加を簡単にします。</p>
+                <div class="hero-buttons">
+                    <a href="#download" class="cta-button">今すぐダウンロード</a>
+                    <a href="#how-it-works" class="secondary-button">詳細を見る</a>
+                </div>
+            </div>
+        </div>
+        <img src="/api/placeholder/600/800" alt="Session アプリ" class="hero-image" />
+    </section>
+
+    <section class="features" id="features">
+        <div class="container">
+            <h2 class="section-title">機能</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🎸</div>
+                    <h3 class="feature-title">地域のセッションを探す</h3>
+                    <p class="feature-description">お気に入りの楽器や音楽スタイルに基づいて、あなたの地域で行われているジャムセッションを見つけましょう。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎵</div>
+                    <h3 class="feature-title">セッションを主催する</h3>
+                    <p class="feature-description">自分自身のジャムセッションを作成・管理し、必要な楽器を指定し、参加者と曲リストを共有しましょう。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">👥</div>
+                    <h3 class="feature-title">ミュージシャンとつながる</h3>
+                    <p class="feature-description">ミュージシャン仲間のネットワークを構築し、プロフィールを閲覧して、次のプロジェクトに最適なバンドメイトを見つけましょう。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📍</div>
+                    <h3 class="feature-title">会場を探す</h3>
+                    <p class="feature-description">評価や空き状況を確認しながら、ジャムセッションに適したミュージシャンフレンドリーな会場を見つけて予約しましょう。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎤</div>
+                    <h3 class="feature-title">進歩を追跡する</h3>
+                    <p class="feature-description">参加したセッションや演奏した曲の履歴を保存して、あなたの音楽の旅を振り返りましょう。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎼</div>
+                    <h3 class="feature-title">曲の管理</h3>
+                    <p class="feature-description">セットリストを作成し、楽器パートを割り当て、セッション前に他の参加者と音楽を共有しましょう。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="how-it-works" id="how-it-works">
+        <div class="container">
+            <h2 class="section-title">使い方</h2>
+            <div class="steps-container">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3 class="step-title">プロフィールを作成</h3>
+                    <p class="step-description">サインアップして、あなたの音楽スキル、楽器、経験をアピールしましょう。</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3 class="step-title">セッションを探す</h3>
+                    <p class="step-description">日付、ジャンル、または必要な楽器でフィルタリングして、地域のジャムセッションを閲覧しましょう。</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3 class="step-title">参加または作成</h3>
+                    <p class="step-description">既存のセッションに参加するか、自分でセッションを作成して他のミュージシャンを招待しましょう。</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3 class="step-title">セッション＆交流</h3>
+                    <p class="step-description">実際に会って、一緒に音楽を演奏し、長続きする音楽的なつながりを築きましょう。</p>
+                </div>
+            </div>
+
+            <div class="app-screenshots">
+                <img src="/api/placeholder/250/500" alt="Session アプリのスクリーンショット" class="screenshot" />
+                <img src="/api/placeholder/250/500" alt="Session アプリのスクリーンショット" class="screenshot" />
+                <img src="/api/placeholder/250/500" alt="Session アプリのスクリーンショット" class="screenshot" />
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonials" id="testimonials">
+        <div class="container">
+            <h2 class="section-title">ミュージシャンの声</h2>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <p class="testimonial-text">Sessionは、一緒に演奏する他のミュージシャンを見つける方法を完全に変えました。素晴らしいジャムセッションに参加し、アプリを通じてバンドも結成しました！</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">
+                            <img src="/api/placeholder/50/50" alt="佐藤" />
+                        </div>
+                        <div class="testimonial-info">
+                            <span class="testimonial-name">佐藤 さくら</span>
+                            <span class="testimonial-role">ギタリスト、東京</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <p class="testimonial-text">ドラマーとして、他の人と練習する場所を見つけるのは常に難しかったです。Sessionのおかげで、今では近所の才能あるミュージシャンと毎週セッションをしています。</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">
+                            <img src="/api/placeholder/50/50" alt="田中" />
+                        </div>
+                        <div class="testimonial-info">
+                            <span class="testimonial-name">田中 拓也</span>
+                            <span class="testimonial-role">ドラマー、大阪</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <p class="testimonial-text">Sessionでジャムセッションを簡単に組織できるのが大好きです。会場の提案や楽器パートの管理により、計画が簡単になります。</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">
+                            <img src="/api/placeholder/50/50" alt="山田" />
+                        </div>
+                        <div class="testimonial-info">
+                            <span class="testimonial-name">山田 美香</span>
+                            <span class="testimonial-role">ピアニスト、京都</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="download" id="download">
+        <div class="container">
+            <h2 class="section-title">今すぐSessionをダウンロード</h2>
+            <p class="hero-subtitle">iOS と Android で利用可能。あなたの近くのミュージシャンとつながりましょう！</p>
+            <div class="download-buttons">
+                <a href="#" class="download-button">
+                    <div class="download-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12.152 5.72266C14.891 5.72266 16.623 8.15466 16.623 8.15466C16.623 8.15466 14.891 10.5947 12.152 10.5947C9.41301 10.5947 7.68066 8.15466 7.68066 8.15466C7.68066 8.15466 9.41301 5.72266 12.152 5.72266Z" fill="white"/>
+                            <path d="M12.1523 10.5947C14.8913 10.5947 16.6237 13.0267 16.6237 13.0267C16.6237 13.0267 14.8913 15.4667 12.1523 15.4667C9.41334 15.4667 7.68066 13.0267 7.68066 13.0267C7.68066 13.0267 9.41334 10.5947 12.1523 10.5947Z" fill="white"/>
+                            <path d="M7.68066 8.15466C7.68066 8.15466 5.14866 6.53266 2.40966 8.15466C-0.329344 9.77666 2.40966 13.0267 2.40966 13.0267C2.40966 13.0267 5.14866 14.6487 7.68066 13.0267C10.2127 11.4047 7.68066 8.15466 7.68066 8.15466Z" fill="white"/>
+                            <path d="M16.623 8.15466C16.623 8.15466 19.155 6.53266 21.894 8.15466C24.633 9.77666 21.894 13.0267 21.894 13.0267C21.894 13.0267 19.155 14.6487 16.623 13.0267C14.091 11.4047 16.623 8.15466 16.623 8.15466Z" fill="white"/>
+                        </svg>
+                    </div>
+                    <div class="download-text">
+                        <span class="download-small">入手する</span>
+                        App Store
+                    </div>
+                </a>
+                <a href="#" class="download-button">
+                    <div class="download-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3.17578 21.4845C3.48828 21.797 3.95703 21.9845 4.48828 21.9845C4.72266 21.9845 4.95703 21.9533 5.20312 21.8752L5.21484 21.8673L13.3711 17.797L5.36328 13.6001L3.17578 21.4845Z" fill="white"/>
+                            <path d="M5.86328 13.3126L13.8711 17.5001L21.8398 13.3126L13.8711 9.12506L5.86328 13.3126Z" fill="white"/>
+                            <path d="M21.6328 21.9064C21.8789 21.9064 22.1133 21.8752 22.3594 21.797C22.9375 21.6189 23.3672 21.2361 23
